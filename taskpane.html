@@ -9,7 +9,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', -apple-system, sans-serif;
-      padding: 20px;
+      padding: 16px;
       background: #f5f5f5;
       min-height: 100vh;
     }
@@ -17,25 +17,25 @@
     h1 {
       font-size: 18px;
       color: #1a365d;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-align: center;
     }
     .subtitle {
       font-size: 12px;
       color: #666;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .btn {
       width: 100%;
-      padding: 14px 20px;
+      padding: 12px 16px;
       border: none;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .btn-primary {
       background: #1a365d;
@@ -53,45 +53,128 @@
     }
     .btn-secondary:hover { background: #f0f0f0; }
     .status {
-      padding: 12px;
+      padding: 10px;
       border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 13px;
+      margin-bottom: 12px;
+      font-size: 12px;
       text-align: center;
     }
     .status.info { background: #e3f2fd; color: #1565c0; }
     .status.success { background: #e8f5e9; color: #2e7d32; }
     .status.error { background: #ffebee; color: #c62828; }
     .status.processing { background: #fff3e0; color: #ef6c00; }
-    .options {
+    .card {
       background: white;
       border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
-    .options h3 {
+    .card h3 {
       font-size: 13px;
       color: #333;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .option-item {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
+    .option-item:last-child { margin-bottom: 0; }
     .option-item input[type="checkbox"] {
       margin-right: 8px;
+      width: 16px;
+      height: 16px;
     }
     .option-item label {
       font-size: 12px;
       color: #555;
+    }
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 10px;
+    }
+    .toggle-label {
+      font-size: 13px;
+      color: #333;
+      font-weight: 500;
+    }
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    .toggle input:checked + .toggle-slider {
+      background-color: #1a365d;
+    }
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+    .ai-settings {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+    }
+    .ai-settings.hidden { display: none; }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .input-group input:focus, .input-group select:focus {
+      outline: none;
+      border-color: #1a365d;
     }
     .progress {
       height: 4px;
       background: #e0e0e0;
       border-radius: 2px;
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .progress-bar {
       height: 100%;
@@ -100,17 +183,24 @@
     }
     .hidden { display: none; }
     .slide-count {
-      font-size: 12px;
+      font-size: 11px;
       color: #888;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+    }
+    .badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #e3f2fd;
+      color: #1565c0;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>✨ PPT 一键美化</h1>
-    <p class="subtitle">AI 自动优化排版和配色</p>
+    <p class="subtitle">智能优化排版和配色</p>
     
     <div id="slideCount" class="slide-count"></div>
     
@@ -120,8 +210,38 @@
       <div id="progressBar" class="progress-bar" style="width: 0%"></div>
     </div>
     
-    <div class="options">
-      <h3>美化选项</h3>
+    <!-- AI 开关 -->
+    <div class="card">
+      <div class="toggle-container">
+        <span class="toggle-label">🤖 AI 智能美化</span>
+        <label class="toggle">
+          <input type="checkbox" id="aiToggle" onchange="toggleAI()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div id="aiSettings" class="ai-settings hidden">
+        <div class="input-group">
+          <label>API Key</label>
+          <input type="password" id="apiKey" placeholder="sk-..." onchange="saveSettings()">
+        </div>
+        <div class="input-group">
+          <label>API 地址（可选，留空用官方）</label>
+          <input type="text" id="apiBase" placeholder="https://api.anthropic.com" onchange="saveSettings()">
+        </div>
+        <div class="input-group">
+          <label>模型</label>
+          <select id="aiModel" onchange="saveSettings()">
+            <option value="claude-sonnet-4-20250514">Claude Sonnet 4</option>
+            <option value="claude-opus-4-6">Claude Opus 4</option>
+            <option value="claude-3-5-haiku-20241022">Claude 3.5 Haiku</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 美化选项 -->
+    <div class="card">
+      <h3>🎨 美化选项</h3>
       <div class="option-item">
         <input type="checkbox" id="optFont" checked>
         <label for="optFont">统一字体和字号</label>
