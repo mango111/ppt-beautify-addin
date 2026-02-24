@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPT 一键美化</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', -apple-system, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+      min-height: 100vh;
+    }
+    .container { max-width: 300px; margin: 0 auto; }
+    h1 {
+      font-size: 18px;
+      color: #1a365d;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+    .btn-primary {
+      background: #1a365d;
+      color: white;
+    }
+    .btn-primary:hover { background: #2d4a7c; }
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: white;
+      color: #1a365d;
+      border: 1px solid #ddd;
+    }
+    .btn-secondary:hover { background: #f0f0f0; }
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      text-align: center;
+    }
+    .status.info { background: #e3f2fd; color: #1565c0; }
+    .status.success { background: #e8f5e9; color: #2e7d32; }
+    .status.error { background: #ffebee; color: #c62828; }
+    .status.processing { background: #fff3e0; color: #ef6c00; }
+    .options {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .options h3 {
+      font-size: 13px;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .option-item input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    .option-item label {
+      font-size: 12px;
+      color: #555;
+    }
+    .progress {
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #1a365d;
+      transition: width 0.3s;
+    }
+    .hidden { display: none; }
+    .slide-count {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✨ PPT 一键美化</h1>
+    <p class="subtitle">AI 自动优化排版和配色</p>
+    
+    <div id="slideCount" class="slide-count"></div>
+    
+    <div id="status" class="status info hidden"></div>
+    
+    <div id="progressContainer" class="progress hidden">
+      <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+    </div>
+    
+    <div class="options">
+      <h3>美化选项</h3>
+      <div class="option-item">
+        <input type="checkbox" id="optFont" checked>
+        <label for="optFont">统一字体和字号</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="optColor" checked>
+        <label for="optColor">优化配色方案</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="optLayout" checked>
+        <label for="optLayout">调整元素布局</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="optAlign" checked>
+        <label for="optAlign">对齐和间距优化</label>
+      </div>
+    </div>
+    
+    <button id="beautifyBtn" class="btn btn-primary" onclick="startBeautify()">
+      🎨 开始美化
+    </button>
+    
+    <button id="undoBtn" class="btn btn-secondary hidden" onclick="undoChanges()">
+      ↩️ 撤销更改
+    </button>
+  </div>
+
+  <script src="./src/taskpane.js"></script>
+</body>
+</html>
